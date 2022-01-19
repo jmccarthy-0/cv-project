@@ -37,10 +37,11 @@ class WorkHistory extends Component {
     }
 
     render() {
-        const {workHistoryFields} = this.state;
+        const  {formFields, storeInputData} = this.props;
+
         return(
             <section>
-                <InputGroup fields={workHistoryFields} />
+                <InputGroup formFields={formFields} storeInputData={storeInputData} currentFieldsKey="workHistoryFields"/>
 
                 <button>Add Experience</button>
                 

@@ -6,16 +6,18 @@ class InputGroup extends Component {
     }
 
     render() {
-        const {fields} = this.props;
+        const  {formFields, currentFieldsKey, storeInputData} = this.props;
+
         return(
             <div>
                 {
-                    Object.keys(fields).map(fieldKey => {
-                        const field = fields[fieldKey];
+                    Object.keys(formFields).map(fieldKey => {
+                        const field = formFields[fieldKey];
                         return (
                             <div key={fieldKey}>
-                                <label for={fieldKey}>{field.label}</label>
-                                <input id={fieldKey} type={field.type}/>
+                                <label htmlFor={fieldKey}>{field.label}</label>
+                                <input id={fieldKey} type={field.type} onChange={e => {storeInputData(e, currentFieldsKey)}}/>
+                                <p>{field.value}</p>
                             </div>
                         );
                     })
