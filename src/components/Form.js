@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ContactInfo from './ContactInfo';
 import WorkHistory from './WorkHistory';
+import Education from './Education';
 
 class Form extends Component {
     constructor() {
@@ -79,13 +80,37 @@ class Form extends Component {
                     label: 'End Date',
                     type: 'date',
                     value: ''
+                },
+                description: {
+                    label: 'Description',
+                    type: 'textarea',
+                    value: ''
                 }
             },
-            workHistoryData = []
+            educationFields: {
+                institution: {
+                    label: 'School/Institution:',
+                    type: 'string',
+                    value: ''
+                },
+                degree: {
+                    label: 'Degree',
+                    type: 'string',
+                    value: ''
+                },
+                endDate: {
+                    label: 'End Date',
+                    type: 'date',
+                    value: ''
+                }
+            },       
+            workHistoryData: [],
+            educationData: []
         }
 
         this.storeInputData = this.storeInputData.bind(this);
-        this.addWorkHistoryItem = this.addWorkHistoryItem.bind(this);
+        this.addDataItem = this.addDataItem.bind(this);
+        this.clearInputs = this.clearInputs.bind(this);
     }
 
     storeInputData(e, currentFields) {
@@ -97,8 +122,40 @@ class Form extends Component {
         });
     }
 
-    addWorkHistoryItem(e) {
+    //Refactor for Education Section reuse
+    addDataItem(e, stateObj, dataProperty) {
         e.preventDefault();
+        const newItem = {};
+
+        for (const field in stateObj) {
+            newItem[field] = {
+                label: stateObj[field].label,
+                value: stateObj[field].value
+            };
+        }
+        this.setState(prevState => ({
+            [dataProperty]: [...prevState[dataProperty], newItem]
+        }), this.clearInputs(stateObj));
+    }
+
+    clearInputs(stateObj) {
+        const updatedFields = {};
+
+        for (const field in stateObj) {
+            updatedFields[field] = {};
+
+            for (const detail in stateObj[field]) {
+                if (detail === 'value') {
+                    updatedFields[field][detail] = '';
+                } else {
+                    updatedFields[field][detail] = stateObj[field][detail];
+                }
+            }
+        }
+
+        this.setState({
+            [stateObj]: updatedFields
+        });
     }
 
     render() {
@@ -106,7 +163,14 @@ class Form extends Component {
         return (
             <form>
                 <ContactInfo formFields={this.state.contactInfoFields} storeInputData={this.storeInputData} />
-                <WorkHistory formFields={this.state.workHistoryFields} storeInputData={this.storeInputData}/>
+                <WorkHistory formFields={this.state.workHistoryFields} 
+                            storeInputData={this.storeInputData} 
+                            workHistoryData={this.state.workHistoryData}  
+                            addWorkHistoryItem={this.addDataItem} />
+                <Education formFields={this.state.educationFields}
+                            storeInputData={this.storeInputData} 
+                            educationData={this.state.educationData}
+                            addEducationItem={this.addDataItem}/>
             </form>
         );
     }

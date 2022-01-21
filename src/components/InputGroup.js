@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
 
 class InputGroup extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const  {formFields, currentFieldsKey, storeInputData} = this.props;
 
@@ -13,11 +9,17 @@ class InputGroup extends Component {
                 {
                     Object.keys(formFields).map(fieldKey => {
                         const field = formFields[fieldKey];
+                        let input;
+                        if (field.type === 'textarea') {
+                            input = <textarea id={fieldKey} value={field.value} onChange={e => {storeInputData(e, currentFieldsKey)}}></textarea>
+                        } else {
+                            input = <input id={fieldKey} type={field.type} value={field.value} onChange={e => {storeInputData(e, currentFieldsKey)}}/>
+                        }
+
                         return (
                             <div key={fieldKey}>
                                 <label htmlFor={fieldKey}>{field.label}</label>
-                                <input id={fieldKey} type={field.type} onChange={e => {storeInputData(e, currentFieldsKey)}}/>
-                                <p>{field.value}</p>
+                                {input}
                             </div>
                         );
                     })

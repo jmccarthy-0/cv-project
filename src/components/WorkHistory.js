@@ -4,48 +4,40 @@ import InputGroup from './InputGroup';
 class WorkHistory extends Component {
     constructor(props) {
         super(props);
-        
-        this.state = {
-            workHistoryFields: {
-                jobTitle: {
-                    label: 'Job Title',
-                    type: 'string'
-                },
-                company: {
-                    label: 'Company Name',
-                    type: 'string'
-                },
-                workCity: {
-                    label: 'City',
-                    type: 'string'
-                },
-                workState: {
-                    label: 'State',
-                    type: 'string'
-                },
-                startDate: {
-                    label: 'Start Date',
-                    type: 'date'
-                },
-                endDate: {
-                    label: 'End Date',
-                    type: 'date'
-                }
-            },
-            workHistory: []
-        };
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(e) {
+        this.props.addWorkHistoryItem(e, this.props.formFields, 'workHistoryData');
     }
 
     render() {
-        const  {formFields, storeInputData} = this.props;
+        const  {formFields, storeInputData, workHistoryData} = this.props;
 
         return(
             <section>
                 <InputGroup formFields={formFields} storeInputData={storeInputData} currentFieldsKey="workHistoryFields"/>
 
-                <button>Add Experience</button>
+                <button onClick={this.handleClick}>Add Experience</button>
                 
                 <button>Continue</button>
+
+                <ul>
+                    {
+                        workHistoryData.map(item => {
+                            return (
+                                <li>
+                                    <p>{item.company.value}</p>
+                                    <p>{item.jobTitle.value}</p>
+                                    <p>{item.workCity.value}, {item.workState.value}</p>
+                                    <p>{item.startDate.value} - {item.endDate.value}</p>
+                                    <p>{item.description.value}</p>
+                                </li>
+                            );
+                        })
+                    }
+                </ul>
             </section>
         );
     }

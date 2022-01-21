@@ -11,9 +11,15 @@ class ContactInfo extends Component {
 
         return (
             <section>
-                <InputGroup formFields={formFields} storeInputData={storeInputData} currentFieldsKey="contactInfoFields"/>
-                
-                <button>Continue</button>
+                <div>
+                    <InputGroup formFields={formFields} storeInputData={storeInputData} currentFieldsKey="contactInfoFields"/>
+                    
+                    <button>Continue</button>
+                </div>
+                <div>
+                    <button>Edit</button>
+                    <p>{formFields.firstName.value} {formFields.lastName.value}</p>
+                </div>
             </section>
         );
     }
