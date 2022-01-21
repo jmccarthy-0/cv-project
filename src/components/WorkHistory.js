@@ -25,9 +25,9 @@ class WorkHistory extends Component {
 
                 <ul>
                     {
-                        workHistoryData.map(item => {
+                        workHistoryData.map((item, index) => {
                             return (
-                                <li>
+                                <li key={index}>
                                     <p>{item.company.value}</p>
                                     <p>{item.jobTitle.value}</p>
                                     <p>{item.workCity.value}, {item.workState.value}</p>

@@ -153,8 +153,16 @@ class Form extends Component {
             }
         }
 
+        let currentKey;
+        for (const [key, value] of Object.entries(this.state)) {
+            if (value === stateObj) {
+                currentKey = key;
+                break;
+            }
+        }
+
         this.setState({
-            [stateObj]: updatedFields
+            [currentKey]: updatedFields
         });
     }
 
