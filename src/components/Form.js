@@ -170,15 +170,19 @@ class Form extends Component {
 
         return (
             <form>
-                <ContactInfo formFields={this.state.contactInfoFields} storeInputData={this.storeInputData} />
+                <ContactInfo formFields={this.state.contactInfoFields} 
+                            storeInputData={this.storeInputData} 
+                            active={true}/>
                 <WorkHistory formFields={this.state.workHistoryFields} 
                             storeInputData={this.storeInputData} 
                             workHistoryData={this.state.workHistoryData}  
-                            addWorkHistoryItem={this.addDataItem} />
+                            addWorkHistoryItem={this.addDataItem} 
+                            active={false}/>
                 <Education formFields={this.state.educationFields}
                             storeInputData={this.storeInputData} 
                             educationData={this.state.educationData}
-                            addEducationItem={this.addDataItem}/>
+                            addEducationItem={this.addDataItem}
+                            active={false}/>
             </form>
         );
     }
