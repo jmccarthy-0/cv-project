@@ -4,4 +4,23 @@ const handleObject = (target, stateObj, setObj) => {
 } 
 
 
-export {handleObject};
+const clearInputs = (stateObj, setStateObj) => {
+    const updatedFields = {};
+
+    for (const field in stateObj) {
+        updatedFields[field] = {};
+
+        for (const detail in stateObj[field]) {
+            if (detail === 'value') {
+                updatedFields[field][detail] = '';
+            } else {
+                updatedFields[field][detail] = stateObj[field][detail];
+            }
+        }
+    }
+
+    setStateObj(updatedFields);
+}
+
+
+export {handleObject, clearInputs};

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { handleObject } from '../utilities/helper';
-import InputGroup from './InputGroup';
 
 
 function ContactInfo(props) {
+    const [activeState, setActiveState] = useState(true);
+
     const [contactFields, setContactFields] = useState({
         firstName: {label: 'First Name', value: ''},
         lastName: {label: 'Last Name', value: ''},
@@ -18,6 +19,7 @@ function ContactInfo(props) {
 
     return (
         <section>
+            {/* Form Section */}
             <div>                
                 {
                     Object.keys(contactFields).map(field => {
@@ -30,10 +32,12 @@ function ContactInfo(props) {
                     })
                 }
 
-                <button>Continue</button>
+                <button type="button" onClick={e => {setActiveState(!activeState)}}>Continue</button>
             </div>
+            
+            {/* Preview  */}
             <div>
-                <button>Edit</button>
+                <button type="button">Edit</button>
                 <p>{contactFields.firstName.value} {contactFields.lastName.value}</p>
             </div>
         </section>

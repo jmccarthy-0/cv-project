@@ -1,46 +1,87 @@
-import React, {Component} from 'react';
-import InputGroup from './InputGroup';
+import React, {useState, useEffect} from 'react';
+import { handleObject, clearInputs } from '../utilities/helper'
 
-class WorkHistory extends Component {
-    constructor(props) {
-        super(props);
 
-        this.handleClick = this.handleClick.bind(this);
+function WorkHistory(props) {
+    // Hooks
+    const [activeState, setActiveState] = useState(false);
+
+    const [workHistoryFields, setWorkHistoryFields] = useState({
+        jobTitle: {label: 'Job Title', value: ''},
+        company: {label: 'Company Name', value: ''},
+        workCity: {label: 'City', value: ''},
+        workState: {label: 'State', value: ''},
+        startDate: {label: 'Start Date',value: ''},
+        endDate: {label: 'End Date', value: ''},
+        description: {label: 'Description', value: ''}
+    });
+
+    const [workHistoryData, setWorkHistoryData] = useState([]);
+
+    useEffect(() => {
+        clearInputs(workHistoryFields, setWorkHistoryFields);
+    }, [workHistoryData]);
+
+    // Functions
+    function handleClick(e) {
+        e.preventDefault();
+        const newItem = {};
+
+        for (const field in workHistoryFields) {
+            newItem[field] = workHistoryFields[field].value
+        };
+
+        setWorkHistoryData([...workHistoryData, newItem]);
     }
 
-    handleClick(e) {
-        this.props.addWorkHistoryItem(e, this.props.formFields, 'workHistoryData');
-    }
-
-    render() {
-        const  {formFields, storeInputData, workHistoryData} = this.props;
-
-        return(
+    return (
             <section>
-                <InputGroup formFields={formFields} storeInputData={storeInputData} currentFieldsKey="workHistoryFields"/>
-
-                <button onClick={this.handleClick}>Add Experience</button>
-                
-                <button>Continue</button>
-
-                <ul>
+                {/* Form Section */}
+                <div>
                     {
-                        workHistoryData.map((item, index) => {
+                        Object.keys(workHistoryFields).map(field => {
+                            let input;
+
+                            if (field !== 'description') {
+                            input = <input type="text" id={field} name={field} value={workHistoryFields[field].value} onChange={e => handleObject(e.target, workHistoryFields, setWorkHistoryFields)}/>
+                            } else {
+                                input = <textarea id={field} name={field} value={workHistoryFields[field].value} onChange={e => handleObject(e.target, workHistoryFields, setWorkHistoryFields)}/>
+                            }
+
                             return (
-                                <li key={index}>
-                                    <p>{item.company.value}</p>
-                                    <p>{item.jobTitle.value}</p>
-                                    <p>{item.workCity.value}, {item.workState.value}</p>
-                                    <p>{item.startDate.value} - {item.endDate.value}</p>
-                                    <p>{item.description.value}</p>
-                                </li>
+                                <div key={field}>
+                                    <label htmlFor="field">{workHistoryFields[field].label}</label>
+                                    {input}
+                                </div>
                             );
                         })
                     }
-                </ul>
+
+
+                    <button onClick={handleClick}>Add Experience</button>
+                    <button>Continue</button>
+                </div>
+                
+                {/* Preview */}
+                <div>
+                    <ul>
+                        {
+                            workHistoryData.map((item, index) => {
+                                return (
+                                    <li key={index}>
+                                        <p>{item.company}</p>
+                                        <p>{item.jobTitle}</p>
+                                        <p>{item.workCity}, {item.workState}</p>
+                                        <p>{item.startDate} - {item.endDate}</p>
+                                        <p>{item.description}</p>
+                                    </li>
+                                );
+                            })
+                        }
+                    </ul>
+                </div>
             </section>
-        );
-    }
+    );
 }
 
 export default WorkHistory;

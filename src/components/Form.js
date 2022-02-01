@@ -8,85 +8,6 @@ class Form extends Component {
         super();
 
         this.state = {
-            contactInfoFields: {
-                firstName: {
-                    label: 'First Name',
-                    type: 'string',
-                    value: ''
-                },
-                lastName: {
-                    label: 'Last Name',
-                    type: 'string',
-                    value: ''
-                },
-                primaryJobTitle: {
-                    label: 'Job Title',
-                    type: 'string',
-                    value: ''
-                },
-                email: {
-                    label: 'Email',
-                    type: 'string',
-                    value: ''
-                },
-                phone: {
-                    label: 'Phone',
-                    type: 'string',
-                    value: ''
-                },
-                city: {
-                    label: 'City',
-                    type: 'string',
-                    value: ''
-                },
-                state: {
-                    label: 'State',
-                    type: 'string',
-                    value: ''
-                },
-                zip: {
-                    label: 'Zip',
-                    type: 'string',
-                    value: ''
-                }
-            },
-            workHistoryFields: {
-                jobTitle: {
-                    label: 'Job Title',
-                    type: 'string',
-                    value: ''
-                },
-                company: {
-                    label: 'Company Name',
-                    type: 'string',
-                    value: ''
-                },
-                workCity: {
-                    label: 'City',
-                    type: 'string',
-                    value: ''
-                },
-                workState: {
-                    label: 'State',
-                    type: 'string',
-                    value: ''
-                },
-                startDate: {
-                    label: 'Start Date',
-                    type: 'date',
-                    value: ''
-                },
-                endDate: {
-                    label: 'End Date',
-                    type: 'date',
-                    value: ''
-                },
-                description: {
-                    label: 'Description',
-                    type: 'textarea',
-                    value: ''
-                }
-            },
             educationFields: {
                 institution: {
                     label: 'School/Institution:',
@@ -110,7 +31,6 @@ class Form extends Component {
 
         this.storeInputData = this.storeInputData.bind(this);
         this.addDataItem = this.addDataItem.bind(this);
-        this.clearInputs = this.clearInputs.bind(this);
     }
 
     storeInputData(e, currentFields) {
@@ -133,38 +53,8 @@ class Form extends Component {
                 value: stateObj[field].value
             };
         }
-        this.setState(prevState => ({
-            [dataProperty]: [...prevState[dataProperty], newItem]
-        }), this.clearInputs(stateObj));
     }
 
-    clearInputs(stateObj) {
-        const updatedFields = {};
-
-        for (const field in stateObj) {
-            updatedFields[field] = {};
-
-            for (const detail in stateObj[field]) {
-                if (detail === 'value') {
-                    updatedFields[field][detail] = '';
-                } else {
-                    updatedFields[field][detail] = stateObj[field][detail];
-                }
-            }
-        }
-
-        let currentKey;
-        for (const [key, value] of Object.entries(this.state)) {
-            if (value === stateObj) {
-                currentKey = key;
-                break;
-            }
-        }
-
-        this.setState({
-            [currentKey]: updatedFields
-        });
-    }
 
     render() {
 
