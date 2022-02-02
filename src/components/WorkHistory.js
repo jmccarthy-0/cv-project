@@ -4,15 +4,13 @@ import { handleObject, clearInputs } from '../utilities/helper'
 
 function WorkHistory(props) {
     // Hooks
-    const [activeState, setActiveState] = useState(false);
-
     const [workHistoryFields, setWorkHistoryFields] = useState({
         jobTitle: {label: 'Job Title', value: ''},
         company: {label: 'Company Name', value: ''},
         workCity: {label: 'City', value: ''},
         workState: {label: 'State', value: ''},
-        startDate: {label: 'Start Date',value: ''},
-        endDate: {label: 'End Date', value: ''},
+        startDate: {label: 'Start Date',value: '', placeholder: 'mm/yyyy' },
+        endDate: {label: 'End Date', value: '', placeholder: 'mm/yyyy' },
         description: {label: 'Description', value: ''}
     });
 
@@ -23,15 +21,36 @@ function WorkHistory(props) {
     }, [workHistoryData]);
 
     // Functions
-    function handleClick(e) {
+    function handleAddButton(e) {
         e.preventDefault();
         const newItem = {};
+        let empty = true;
 
         for (const field in workHistoryFields) {
+            if (empty && workHistoryFields[field].value !== '') {
+                empty = false;
+            }
+
             newItem[field] = workHistoryFields[field].value
         };
 
-        setWorkHistoryData([...workHistoryData, newItem]);
+        !empty && setWorkHistoryData([...workHistoryData, newItem]);
+    }
+
+    function handleEditButton(e) {
+        e.preventDefault();
+        
+        const index = e.target.id;
+
+        const workItem = workHistoryData[index];
+        const newWorkHistoryFields = {};
+
+        for (const field in workHistoryFields) {
+            newWorkHistoryFields[field] = {...workHistoryFields[field]};
+            newWorkHistoryFields[field].value = workItem[field];
+        }
+
+        setWorkHistoryFields(newWorkHistoryFields);
     }
 
     return (
@@ -43,7 +62,7 @@ function WorkHistory(props) {
                             let input;
 
                             if (field !== 'description') {
-                            input = <input type="text" id={field} name={field} value={workHistoryFields[field].value} onChange={e => handleObject(e.target, workHistoryFields, setWorkHistoryFields)}/>
+                            input = <input type="text" id={field} name={field} value={workHistoryFields[field].value} placeholder={workHistoryFields[field].placeholder ? workHistoryFields[field].placeholder : ''} onChange={e => handleObject(e.target, workHistoryFields, setWorkHistoryFields)}/>
                             } else {
                                 input = <textarea id={field} name={field} value={workHistoryFields[field].value} onChange={e => handleObject(e.target, workHistoryFields, setWorkHistoryFields)}/>
                             }
@@ -58,7 +77,7 @@ function WorkHistory(props) {
                     }
 
 
-                    <button onClick={handleClick}>Add Experience</button>
+                    <button onClick={handleAddButton}>Add Experience</button>
                     <button>Continue</button>
                 </div>
                 
@@ -71,9 +90,7 @@ function WorkHistory(props) {
                                     <li key={index}>
                                         <p>{item.company}</p>
                                         <p>{item.jobTitle}</p>
-                                        <p>{item.workCity}, {item.workState}</p>
-                                        <p>{item.startDate} - {item.endDate}</p>
-                                        <p>{item.description}</p>
+                                        <button id={`${index}`} onClick={handleEditButton}>Edit</button>
                                     </li>
                                 );
                             })
