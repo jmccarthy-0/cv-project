@@ -3,6 +3,9 @@ import { handleObject, clearInputs } from '../utilities/helper'
 
 
 function WorkHistory(props) {
+    const [edit, setEdit] = useState(false);
+    const [activeIndex, setActiveIndex] = useState('');
+
     // Hooks
     const [workHistoryFields, setWorkHistoryFields] = useState({
         jobTitle: {label: 'Job Title', value: ''},
@@ -21,7 +24,7 @@ function WorkHistory(props) {
     }, [workHistoryData]);
 
     // Functions
-    function handleAddButton(e) {
+    function handleAddButton(e, index) {
         e.preventDefault();
         const newItem = {};
         let empty = true;
@@ -34,14 +37,23 @@ function WorkHistory(props) {
             newItem[field] = workHistoryFields[field].value
         };
 
-        !empty && setWorkHistoryData([...workHistoryData, newItem]);
+        if (edit) {
+            const newWorkHistory = [...workHistoryData];
+            newWorkHistory[index] = newItem;
+            setWorkHistoryData(newWorkHistory);
+
+            setEdit(false);
+        } else {
+            !empty && setWorkHistoryData([...workHistoryData, newItem]);
+        }
     }
 
     function handleEditButton(e) {
         e.preventDefault();
-        
-        const index = e.target.id;
 
+        setEdit(true);
+
+        const index = e.target.id;
         const workItem = workHistoryData[index];
         const newWorkHistoryFields = {};
 
@@ -50,11 +62,13 @@ function WorkHistory(props) {
             newWorkHistoryFields[field].value = workItem[field];
         }
 
+        setActiveIndex(index);
         setWorkHistoryFields(newWorkHistoryFields);
     }
 
     return (
             <section>
+                <h3>Work History</h3>
                 {/* Form Section */}
                 <div>
                     {
@@ -77,7 +91,7 @@ function WorkHistory(props) {
                     }
 
 
-                    <button onClick={handleAddButton}>Add Experience</button>
+                    <button onClick={e => handleAddButton(e, activeIndex)}>Add Experience</button>
                     <button>Continue</button>
                 </div>
                 

@@ -19,6 +19,8 @@ function ContactInfo(props) {
 
     return (
         <section>
+            <h3>Contact Info</h3>
+            
             {/* Form Section */}
             <div>                
                 {

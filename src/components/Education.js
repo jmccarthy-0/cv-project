@@ -29,6 +29,7 @@ function Education(props) {
 
     return (
         <section>
+            <h3>Education</h3>
             {
                 Object.keys(educationFields).map(field => {
                     return (
