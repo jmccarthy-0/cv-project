@@ -1,71 +1,22 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import ContactInfo from './ContactInfo';
 import WorkHistory from './WorkHistory';
 import Education from './Education';
 
-class Form extends Component {
-    constructor() {
-        super();
+function Form() {
+    const [activeSection, setActiveSection] = useState(0);
 
-        this.state = {
-            educationFields: {
-                institution: {
-                    label: 'School/Institution:',
-                    type: 'string',
-                    value: ''
-                },
-                degree: {
-                    label: 'Degree',
-                    type: 'string',
-                    value: ''
-                },
-                endDate: {
-                    label: 'End Date',
-                    type: 'date',
-                    value: ''
-                }
-            },       
-            workHistoryData: [],
-            educationData: []
-        }
-
-        this.storeInputData = this.storeInputData.bind(this);
-        this.addDataItem = this.addDataItem.bind(this);
+    function updateActiveSection(finishedSection) {
+        setActiveSection(finishedSection + 1);
     }
 
-    storeInputData(e, currentFields) {
-        const fields = {...this.state[currentFields]};
-        fields[e.target.id].value = e.target.value;
-
-        this.setState({
-            [fields]: fields
-        });
-    }
-
-    //Refactor for Education Section reuse
-    addDataItem(e, stateObj, dataProperty) {
-        e.preventDefault();
-        const newItem = {};
-
-        for (const field in stateObj) {
-            newItem[field] = {
-                label: stateObj[field].label,
-                value: stateObj[field].value
-            };
-        }
-    }
-
-
-    render() {
-
-        return (
-            <form>
-                <ContactInfo active={true}/>
-                <WorkHistory active={false}/>
-                <Education active={false}/>
-            </form>
-        );
-    }
+    return (
+        <form>
+            <ContactInfo active={activeSection === 0} updateActiveSection={updateActiveSection}/>
+            <WorkHistory active={activeSection === 1} updateActiveSection={updateActiveSection}/>
+            <Education active={activeSection === 2} updateActiveSection={updateActiveSection}/>
+        </form>
+    );
 }
 
 export default Form;

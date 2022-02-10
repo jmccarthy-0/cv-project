@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import EducationInputs from './education/EducationInputs';
+import EducationPreview from './education/EducationPreview';
 import { handleObject, clearInputs } from '../utilities/helper'
 
 
@@ -30,33 +32,11 @@ function Education(props) {
     return (
         <section>
             <h3>Education</h3>
-            {
-                Object.keys(educationFields).map(field => {
-                    return (
-                        <div key={field}>
-                            <label htmlFor="field">{educationFields[field].label}</label>
-                            <input type="text" id={field} name={field} value={educationFields[field].value} placeholder={educationFields[field].placeholder ? educationFields[field].placeholder : ''} onChange={e => handleObject(e.target, educationFields, setEducationFields)}/>
-                        </div>
-                    );
-                })
-            }
+            <p>{props.active ? 'yes':'no'}</p>
 
-            <button onClick={handleClick}>Add Education</button>
+            {props.active && <EducationInputs educationFields={educationFields} setEducationFields={setEducationFields} handleClick={handleClick} updateActiveSection={props.updateActiveSection} />}
             
-            <button>Continue</button>
-
-            <ul>
-                {
-                    educationData.map(item => {
-                        return (
-                            <li>
-                                <p>{item.institution.value}</p>
-                                <p>{item.degree.value}</p>
-                            </li>
-                        );
-                    })
-                }
-            </ul>
+            <EducationPreview />       
         </section>
     );
     

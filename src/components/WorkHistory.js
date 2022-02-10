@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import WorkInputs from './work/WorkInputs';
+import WorkPreview from './work/WorkPreview'
 import { handleObject, clearInputs } from '../utilities/helper'
 
 
@@ -23,7 +25,7 @@ function WorkHistory(props) {
         clearInputs(workHistoryFields, setWorkHistoryFields);
     }, [workHistoryData]);
 
-    // Functions
+    // Functions (MOVE TO INDIVID COMPONENTS)
     function handleAddButton(e, index) {
         e.preventDefault();
         const newItem = {};
@@ -38,11 +40,14 @@ function WorkHistory(props) {
         };
 
         if (edit) {
-            const newWorkHistory = [...workHistoryData];
-            newWorkHistory[index] = newItem;
-            setWorkHistoryData(newWorkHistory);
+            if (!empty) {
+                const newWorkHistory = [...workHistoryData];
+                newWorkHistory[index] = newItem;
+                setWorkHistoryData(newWorkHistory);
+            }
 
             setEdit(false);
+            setActiveIndex('');
         } else {
             !empty && setWorkHistoryData([...workHistoryData, newItem]);
         }
@@ -64,54 +69,20 @@ function WorkHistory(props) {
 
         setActiveIndex(index);
         setWorkHistoryFields(newWorkHistoryFields);
+        props.updateActiveSection(1);
     }
 
     return (
-            <section>
-                <h3>Work History</h3>
-                {/* Form Section */}
-                <div>
-                    {
-                        Object.keys(workHistoryFields).map(field => {
-                            let input;
-
-                            if (field !== 'description') {
-                            input = <input type="text" id={field} name={field} value={workHistoryFields[field].value} placeholder={workHistoryFields[field].placeholder ? workHistoryFields[field].placeholder : ''} onChange={e => handleObject(e.target, workHistoryFields, setWorkHistoryFields)}/>
-                            } else {
-                                input = <textarea id={field} name={field} value={workHistoryFields[field].value} onChange={e => handleObject(e.target, workHistoryFields, setWorkHistoryFields)}/>
-                            }
-
-                            return (
-                                <div key={field}>
-                                    <label htmlFor="field">{workHistoryFields[field].label}</label>
-                                    {input}
-                                </div>
-                            );
-                        })
-                    }
-
-
-                    <button onClick={e => handleAddButton(e, activeIndex)}>Add Experience</button>
-                    <button>Continue</button>
-                </div>
-                
-                {/* Preview */}
-                <div>
-                    <ul>
-                        {
-                            workHistoryData.map((item, index) => {
-                                return (
-                                    <li key={index}>
-                                        <p>{item.company}</p>
-                                        <p>{item.jobTitle}</p>
-                                        <button id={`${index}`} onClick={handleEditButton}>Edit</button>
-                                    </li>
-                                );
-                            })
-                        }
-                    </ul>
-                </div>
-            </section>
+        <section>
+            <h3>Work History</h3>
+            <p>{props.active ? 'yes':'no'}</p>
+            
+            { props.active && <WorkInputs workHistoryFields={workHistoryFields} setWorkHistoryFields={setWorkHistoryFields} activeIndex={activeIndex} updateActiveSection={props.updateActiveSection} handleAddButton={handleAddButton} />}
+                    
+            <WorkPreview workHistoryData={workHistoryData} handleEditButton={handleEditButton}/>
+            
+            
+        </section>
     );
 }
 

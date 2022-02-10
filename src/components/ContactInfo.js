@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { handleObject } from '../utilities/helper';
-
+import ContactInputs from './contact/ContactInputs';
+import ContactPreview from './contact/ContactPreview'
 
 function ContactInfo(props) {
-    const [activeState, setActiveState] = useState(true);
-
     const [contactFields, setContactFields] = useState({
         firstName: {label: 'First Name', value: ''},
         lastName: {label: 'Last Name', value: ''},
@@ -20,28 +18,13 @@ function ContactInfo(props) {
     return (
         <section>
             <h3>Contact Info</h3>
-            
-            {/* Form Section */}
-            <div>                
-                {
-                    Object.keys(contactFields).map(field => {
-                        return (
-                            <div key={field}>
-                                <label htmlFor="field">{contactFields[field].label}</label>
-                                <input type="text" id={field} name={field} value={contactFields[field].value} onChange={e => handleObject(e.target, contactFields, setContactFields)}/>
-                            </div>
-                        );
-                    })
-                }
-
-                <button type="button" onClick={e => {setActiveState(!activeState)}}>Continue</button>
-            </div>
-            
-            {/* Preview  */}
-            <div>
-                <button type="button">Edit</button>
-                <p>{contactFields.firstName.value} {contactFields.lastName.value}</p>
-            </div>
+            <p>{props.active ? 'yes':'no'}</p>
+            {
+                props.active ? 
+                    <ContactInputs contactFields={contactFields} setContactFields={setContactFields} updateActiveSection={props.updateActiveSection} />
+                :
+                    <ContactPreview contactFields={contactFields} updateActiveSection={props.updateActiveSection} />
+            }
         </section>
     );
     
