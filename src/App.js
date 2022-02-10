@@ -6,6 +6,7 @@ class App extends Component {
     return (
       <main>
         <Form />
+        <button>Preview</button>
       </main>
     );
   }

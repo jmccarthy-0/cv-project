@@ -1,28 +1,33 @@
-import React, {Component} from 'react';
-import InputGroup from './InputGroup';
+import React, { useState } from 'react';
+import ContactInputs from './contact/ContactInputs';
+import ContactPreview from './contact/ContactPreview'
 
-class ContactInfo extends Component {
-    constructor(props) {
-        super(props);
-    }
+function ContactInfo(props) {
+    const [contactFields, setContactFields] = useState({
+        firstName: {label: 'First Name', value: ''},
+        lastName: {label: 'Last Name', value: ''},
+        primaryOccupation: {label: 'Occupation Title', value: ''},
+        email: {label: 'Email', value: ''},
+        phone: {label: 'Phone', value: ''},
+        contactCity: {label: 'City', value: ''},
+        contactState: {label: 'State', value: ''},
+        contactZip: {label: 'Zip', value: ''}
+     });
+                           
 
-    render() {
-        const  {formFields, storeInputData} = this.props;
-
-        return (
-            <section>
-                <div>
-                    <InputGroup formFields={formFields} storeInputData={storeInputData} currentFieldsKey="contactInfoFields"/>
-                    
-                    <button>Continue</button>
-                </div>
-                <div>
-                    <button>Edit</button>
-                    <p>{formFields.firstName.value} {formFields.lastName.value}</p>
-                </div>
-            </section>
-        );
-    }
+    return (
+        <section>
+            <h3>Contact Info</h3>
+            <p>{props.active ? 'yes':'no'}</p>
+            {
+                props.active ? 
+                    <ContactInputs contactFields={contactFields} setContactFields={setContactFields} updateActiveSection={props.updateActiveSection} />
+                :
+                    <ContactPreview contactFields={contactFields} updateActiveSection={props.updateActiveSection} />
+            }
+        </section>
+    );
+    
 }
 
 export default ContactInfo;
