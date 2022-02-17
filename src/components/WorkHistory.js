@@ -1,8 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import WorkInputs from './work/WorkInputs';
+import React, {useState} from 'react';
+import MultiItemInputs from './common/MultiItemInputs';
 import WorkPreview from './work/WorkPreview'
-import { handleObject, clearInputs } from '../utilities/helper'
-
 
 function WorkHistory(props) {
     const [edit, setEdit] = useState(false);
@@ -21,67 +19,31 @@ function WorkHistory(props) {
 
     const [workHistoryData, setWorkHistoryData] = useState([]);
 
-    useEffect(() => {
-        clearInputs(workHistoryFields, setWorkHistoryFields);
-    }, [workHistoryData]);
-
-    // Functions (MOVE TO INDIVID COMPONENTS)
-    function handleAddButton(e, index) {
-        e.preventDefault();
-        const newItem = {};
-        let empty = true;
-
-        for (const field in workHistoryFields) {
-            if (empty && workHistoryFields[field].value !== '') {
-                empty = false;
-            }
-
-            newItem[field] = workHistoryFields[field].value
-        };
-
-        if (edit) {
-            if (!empty) {
-                const newWorkHistory = [...workHistoryData];
-                newWorkHistory[index] = newItem;
-                setWorkHistoryData(newWorkHistory);
-            }
-
-            setEdit(false);
-            setActiveIndex('');
-        } else {
-            !empty && setWorkHistoryData([...workHistoryData, newItem]);
-        }
-    }
-
-    function handleEditButton(e) {
-        e.preventDefault();
-
-        setEdit(true);
-
-        const index = e.target.id;
-        const workItem = workHistoryData[index];
-        const newWorkHistoryFields = {};
-
-        for (const field in workHistoryFields) {
-            newWorkHistoryFields[field] = {...workHistoryFields[field]};
-            newWorkHistoryFields[field].value = workItem[field];
-        }
-
-        setActiveIndex(index);
-        setWorkHistoryFields(newWorkHistoryFields);
-        props.updateActiveSection(1);
-    }
-
+   
     return (
-        <section>
-            <h3>Work History</h3>
-            <p>{props.active ? 'yes':'no'}</p>
+        <section className={`${props.active ? 'is-active' : ''}`}>
+            <h2 className='form-section-heading'>Work History</h2>
             
-            { props.active && <WorkInputs workHistoryFields={workHistoryFields} setWorkHistoryFields={setWorkHistoryFields} activeIndex={activeIndex} updateActiveSection={props.updateActiveSection} handleAddButton={handleAddButton} />}
+            { props.active && 
+                <MultiItemInputs 
+                    fields={workHistoryFields} 
+                    setFields={setWorkHistoryFields}
+                    dataArray={workHistoryData}
+                    setDataArray={setWorkHistoryData} 
+                    activeIndex={activeIndex} 
+                    setActiveIndex={setActiveIndex}
+                    edit={edit}
+                    setEdit={setEdit} /> }
                     
-            <WorkPreview workHistoryData={workHistoryData} handleEditButton={handleEditButton}/>
+            <WorkPreview
+                workHistoryFields={workHistoryFields}
+                setWorkHistoryFields={setWorkHistoryFields} 
+                workHistoryData={workHistoryData}
+                setActiveIndex={setActiveIndex}    
+                setActiveSection={props.setActiveSection}
+                setEdit={setEdit} />
             
-            
+            {props.active && <button type="button" onClick={e => {props.setActiveSection(2)}} disabled={workHistoryData.length===0}>Continue</button>}
         </section>
     );
 }

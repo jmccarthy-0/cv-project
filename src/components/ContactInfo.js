@@ -16,14 +16,14 @@ function ContactInfo(props) {
                            
 
     return (
-        <section>
-            <h3>Contact Info</h3>
-            <p>{props.active ? 'yes':'no'}</p>
+        <section className={`${props.active ? 'is-active' : ''}`}>
+            <h2 className='form-section-heading'>Contact Info</h2>
+            
             {
                 props.active ? 
-                    <ContactInputs contactFields={contactFields} setContactFields={setContactFields} updateActiveSection={props.updateActiveSection} />
+                    <ContactInputs contactFields={contactFields} setContactFields={setContactFields} setActiveSection={props.setActiveSection} />
                 :
-                    <ContactPreview contactFields={contactFields} updateActiveSection={props.updateActiveSection} />
+                    <ContactPreview contactFields={contactFields} setActiveSection={props.setActiveSection} />
             }
         </section>
     );

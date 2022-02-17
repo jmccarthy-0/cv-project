@@ -12,9 +12,13 @@ function Form() {
 
     return (
         <form>
-            <ContactInfo active={activeSection === 0} updateActiveSection={updateActiveSection}/>
-            <WorkHistory active={activeSection === 1} updateActiveSection={updateActiveSection}/>
+            <h1>Resume Builder</h1>
+            <ContactInfo active={activeSection === 0} setActiveSection={setActiveSection}/>
+            <WorkHistory active={activeSection === 1} setActiveSection={setActiveSection}/>
             <Education active={activeSection === 2} updateActiveSection={updateActiveSection}/>
+            <div className='btn-wrapper'>
+                <button>Preview</button>
+            </div>
         </form>
     );
 }

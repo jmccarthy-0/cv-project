@@ -1,6 +1,24 @@
 import React from 'react';
 
 function WorkPreview(props) {
+    function handleEditButton(e) {
+        e.preventDefault();
+
+        props.setEdit(true);
+
+        const index = e.target.dataset.index;
+        const workItem = props.workHistoryData[index];
+        const newWorkHistoryFields = {};
+
+        for (const field in props.workHistoryFields) {
+            newWorkHistoryFields[field] = {...props.workHistoryFields[field]};
+            newWorkHistoryFields[field].value = workItem[field];
+        }
+
+        props.setActiveIndex(index);
+        props.setWorkHistoryFields(newWorkHistoryFields);
+        props.setActiveSection(1);
+    }
 
     return (
         <div>
@@ -11,7 +29,7 @@ function WorkPreview(props) {
                             <li key={index}>
                                 <p>{item.company}</p>
                                 <p>{item.jobTitle}</p>
-                                <button id={`${index}`} onClick={props.handleEditButton}>Edit</button>
+                                <button data-index={`${index}`} onClick={handleEditButton}>Edit</button>
                             </li>
                         );
                     })
